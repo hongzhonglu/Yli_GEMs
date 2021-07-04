@@ -2,6 +2,14 @@
 # -*- python 3 -*-
 # -*- hongzhong Lu -*-
 
+# to do
+# update biomass composition for 4 strains       reaction ID: xBIOMASS
+# update GEMs based on metabolic engineering strategy
+# simulate the phenotype and get flux data
+
+
+
+
 
 from cobra.io import read_sbml_model, load_matlab_model, write_sbml_model
 import cobra
@@ -30,9 +38,9 @@ exchange_rxn = [x for x in rxn_inf if "exchange" in x]
 model = read_sbml_model("model/iYali_v4.1.1.xml")
 
 # strain 1
-model.reactions.get_by_id("y001714").bounds = (-1.04, 0)
+model.reactions.get_by_id("y001714").bounds = (-1.04, 0) # D-glucose exchange
 #model.reactions.get_by_id("R_EX_o2(e)").bounds = (-2,0) # current no data
-model.reactions.get_by_id("y001663").bounds = (2.06, 2.06)
+model.reactions.get_by_id("y001663").bounds = (2.06, 2.06) # bicarbonate exchange
 solution1 = model.optimize()
 
 # strain 2
