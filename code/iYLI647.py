@@ -21,7 +21,7 @@ model.reactions.get_by_id("R_EX_glc(e)").bounds = (-0.67,0)
 model.reactions.get_by_id("R_EX_o2(e)").bounds = (-2,0)
 
 solution = model.optimize()
-print(model.summary())
+#print(model.summary()) #can't run
 fluxes = pd.DataFrame(solution.fluxes)
 fluxes.to_csv("result/iYLI647.csv")
 
@@ -46,4 +46,8 @@ model.reactions.get_by_id("R_EX_glc(e)").bounds = (-0.61, 0)
 #model.reactions.get_by_id("R_EX_o2(e)").bounds = (-2,0) # current no data
 model.reactions.get_by_id("R_EX_co2(e)").bounds = (1.5, 1.5)
 solution3 = model.optimize()
+
+
+
+
 
