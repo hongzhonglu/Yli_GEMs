@@ -69,7 +69,18 @@ fseof_df = sorted_fseof(model=GEM_model, biomass_rxn_id=biomass_rxn_id0, test_rx
 ec_fseof_df = sorted_fseof(model0, biomass_rxn_id0, test_rxn_id0)
 
 fseof_df.to_excel("result/fseof_df_result_for_Kmarx.xlsx")
+ec_fseof_df.to_excel("result/ec_fseof_df_result_for_Kmarx.xlsx")
 
 
+# print the rxn ID and gene association
+rxnID =[]
+gpr=[]
+for rxn in model0.reactions:
+    print(rxn.id, rxn.gene_reaction_rule)
+    rxnID.append(rxn.id)
+    gpr.append(rxn.gene_reaction_rule)
+
+ID_mapping = pd.DataFrame({"rxnID":rxnID,"gene":gpr})
+ID_mapping.to_excel("result/ID_mapping_for_Kmarx.xlsx")
 
 
