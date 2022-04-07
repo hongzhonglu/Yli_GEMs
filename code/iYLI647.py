@@ -19,11 +19,53 @@ model = load_matlab_model("model/iYLI647_update2.mat")
 model.objective = 'R_r156'
 model.reactions.get_by_id("R_EX_glc(e)").bounds = (-0.67,0)
 model.reactions.get_by_id("R_EX_o2(e)").bounds = (-2,0)
+model.reactions.get_by_id("R_EX_inost(e)").bounds = (0,0)
 
 solution = model.optimize()
 #print(model.summary()) #can't run
 fluxes = pd.DataFrame(solution.fluxes)
 fluxes.to_csv("result/iYLI647.csv")
+
+id_all = []
+name_all = []
+formula_all = []
+upper_all = []
+lower_all = []
+for rxn in model.reactions:
+    print(rxn.id)
+    id_all.append(rxn.id)
+    name_all.append(rxn.name)
+    formula_all.append(rxn.reaction)
+    upper_all.append(rxn.upper_bound)
+    lower_all.append(rxn.lower_bound)
+
+rxn_df = pd.DataFrame({"id":id_all,"name":name_all,"formula":formula_all,"lower_bound":lower_all, "upper_bound":upper_all})
+rxn_df["flux"] = list(solution.fluxes)
+rxn_df.to_excel("result/iYL1647.xlsx")
+rxn_df_exchange = rxn_df[rxn_df["name"].str.contains("exchange")]
+
+
+# new simulation
+model = load_matlab_model("model/iYLI647_update2.mat")
+# R_EX_for(e)	Formate exchange
+# R_EX_ac(e) Acetate exchange	ac[e] -->
+model.objective = 'R_r156'
+model.reactions.get_by_id("R_EX_glc(e)").bounds = (0,0)
+solution = model.optimize()
+model.reactions.get_by_id("R_EX_for(e)").bounds = (-5, 0)
+solution1 = model.optimize()
+model.reactions.get_by_id("R_EX_ac(e)").bounds = (-2.5, 0)
+solution2 = model.optimize()
+
+model.reactions.get_by_id("R_EX_for(e)").bounds = (0, 0)
+solution1 = model.optimize()
+model.reactions.get_by_id("R_EX_ac(e)").bounds = (-5, 0)
+solution3 = model.optimize()
+
+
+
+
+
 
 # test using the new data from Fujing
 model = load_matlab_model("model/iYLI647_update2.mat")
