@@ -16012,7 +16012,7 @@
           <speciesReference species="m1824__91__e__93__" stoichiometry="1" constant="true"/>
         </listOfReactants>
       </reaction>
-      <reaction metaid="carbohydrate__32__pseudoreaction" id="carbohydrate__32__pseudoreaction" name="carbohydrate pseudoreaction" reversible="false" fast="false" fbc:lowerFluxBound="FB1N0" fbc:upperFluxBound="FB2N1000">
+      <reaction metaid="carbohydrate_pseudoreaction" id="carbohydrate_pseudoreaction" name="carbohydrate pseudoreaction" reversible="false" fast="false" fbc:lowerFluxBound="FB1N0" fbc:upperFluxBound="FB2N1000">
         <listOfReactants>
           <speciesReference species="s_0509__91__c__93__" stoichiometry="0.4068" constant="true"/>
           <speciesReference species="s_1520__91__c__93__" stoichiometry="0.0032" constant="true"/>
@@ -16023,7 +16023,7 @@
           <speciesReference species="carbohydrate__91__c__93__" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction metaid="RNA__32__pseudoreaction" id="RNA__32__pseudoreaction" name="RNA pseudoreaction" reversible="false" fast="false" fbc:lowerFluxBound="FB1N0" fbc:upperFluxBound="FB2N1000">
+      <reaction metaid="RNA_pseudoreaction" id="RNA_pseudoreaction" name="RNA pseudoreaction" reversible="false" fast="false" fbc:lowerFluxBound="FB1N0" fbc:upperFluxBound="FB2N1000">
         <listOfReactants>
           <speciesReference species="s_0423__91__c__93__" stoichiometry="0.0757" constant="true"/>
           <speciesReference species="s_0526__91__c__93__" stoichiometry="0.0578" constant="true"/>
@@ -16034,7 +16034,7 @@
           <speciesReference species="RNA__91__c__93__" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction metaid="DNA__32__pseudoreaction" id="DNA__32__pseudoreaction" name="DNA pseudoreaction" reversible="false" fast="false" fbc:lowerFluxBound="FB1N0" fbc:upperFluxBound="FB2N1000">
+      <reaction metaid="DNA_pseudoreaction" id="DNA_pseudoreaction" name="DNA pseudoreaction" reversible="false" fast="false" fbc:lowerFluxBound="FB1N0" fbc:upperFluxBound="FB2N1000">
         <listOfReactants>
           <speciesReference species="s_0584__91__c__93__" stoichiometry="0.0383" constant="true"/>
           <speciesReference species="s_0589__91__c__93__" stoichiometry="0.0377" constant="true"/>
