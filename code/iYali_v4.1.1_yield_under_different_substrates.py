@@ -68,8 +68,11 @@ model3.reactions.get_by_id("y001634").bounds = (0, 0) # acetate exchange
 solution1 = model3.optimize()
 
 
+
+# for biomass
 # glucose exchange x acetate exchange
 model3 = model.copy()
+model3.objective = 'y002111'
 model3.reactions.get_by_id("y001714").bounds = (-0.5, 0) # D-glucose exchange
 model3.reactions.get_by_id("y001793").bounds = (0, 0) # formate exchange
 model3.reactions.get_by_id("y001634").bounds = (-1.5, 0) # acetate exchange
@@ -88,7 +91,7 @@ for x, y in zip(gluc_flux, ac_flux):
 
 result_df = pd.DataFrame({"glucose_uptake":gluc_flux,"acetate_uptake":ac_flux,"growth_rate":biomass})
 result_df["yield(gDW/mmol C)"] = result_df["growth_rate"]/18
-result_df.to_excel("result/glucose_acetate_for_yli.xlsx")
+result_df.to_excel("result/biomass_for_glucose_acetate_for_yli.xlsx")
 
 
 
@@ -116,7 +119,7 @@ for x, y in zip(for_flux, ac_flux):
 
 result_df2 = pd.DataFrame({"formate_uptake":for_flux,"acetate_uptake":ac_flux,"growth_rate":biomass, "growth_rate_acetate":biomass_acetate})
 result_df2["yield(gDW/mmol C)"] = result_df2["growth_rate"]/18
-result_df2.to_excel("result/formate_acetate_for_yli.xlsx")
+result_df2.to_excel("result/biomass_formate_acetate_for_yli.xlsx")
 
 
 # add
@@ -234,7 +237,7 @@ for rxn in model1.reactions:
 model1.objective = 'new5'
 solution = model1.optimize()
 product_v = solution.objective_value
-model1.reactions.get_by_id("y002111").bounds = (0.1, 0.1)
+model1.reactions.get_by_id("y002111").bounds = (0, 0)
 solution = model1.optimize()
 product_v = solution.objective_value
 
@@ -242,7 +245,8 @@ product_v = solution.objective_value
 
 
 
-
+# for resveratrol
+# formate and acetate
 # how to combine
 for_flux = np.linspace(-18, 0, 30)
 ac_flux = [(-18-x)/2 for x in for_flux]
@@ -255,20 +259,8 @@ for x, y in zip(for_flux, ac_flux):
     product_v = solution10.objective_value
     product.append(product_v)
 
-# only acetate
-product_acetate = []
-for x, y in zip(for_flux, ac_flux):
-    model1.reactions.get_by_id("y001714").bounds = (0, 0)  # D-glucose exchange
-    model1.reactions.get_by_id("y001793").bounds = (0, 0)  # formate exchange
-    model1.reactions.get_by_id("y001634").bounds = (y, 0)  # acetate exchange
-    solution10 = model1.optimize()
-    product_acetate_v = solution10.objective_value
-    product_acetate.append(product_acetate_v)
-
-result_df2 = pd.DataFrame({"formate_uptake":for_flux,"acetate_uptake":ac_flux,"product_rate":product, "product_rate_acetate":product_acetate})
-result_df2["product_yield(gDW/mmol C)"] = result_df2["product_rate"]/18
-result_df2["product_yield_acetate(gDW/mmol C)"] = result_df2["product_rate_acetate"]/(-2*result_df2["acetate_uptake"])
-
+result_df2 = pd.DataFrame({"formate_uptake(mmol for/gDW.h)":for_flux,"acetate_uptake(mmol ac/gDW.h)":ac_flux,"product_rate(mmol res/gDW.h)":product})
+result_df2["product_yield(mmol C/mmol C)"] = 14*result_df2["product_rate(mmol res/gDW.h)"]/18
 result_df2.to_excel("result/product_formate_acetate_for_yli.xlsx")
 
 
@@ -276,22 +268,12 @@ result_df2.to_excel("result/product_formate_acetate_for_yli.xlsx")
 
 
 
-
-
-
-
+# for resveratrol
 # glucose exchange x acetate exchange
-model1.add_boundary(model.metabolites.get_by_id("m1641"), type="sink")
-model1.objective = 'SK_m1641'
+#model1.add_boundary(model.metabolites.get_by_id("m1641"), type="sink")
 model1.objective = 'new5'
-model1.reactions.get_by_id("y002111").bounds = (0, 0)
-model1.reactions.get_by_id("y001714").bounds = (-0.5, 0) # D-glucose exchange
-model1.reactions.get_by_id("y001793").bounds = (0, 0) # formate exchange
-model1.reactions.get_by_id("y001634").bounds = (-1.5, 0) # acetate exchange
-solution10 = model1.optimize()
-# how to combine
 gluc_flux = np.linspace(-3, 0, 30)
-ac_flux = [(-3-x)*3 for x in gluc_flux]
+ac_flux = [(-3-x)*6/2 for x in gluc_flux]
 product = []
 for x, y in zip(gluc_flux, ac_flux):
     model1.reactions.get_by_id("y001714").bounds = (x, 0)  # D-glucose exchange
@@ -301,13 +283,37 @@ for x, y in zip(gluc_flux, ac_flux):
     product_v = solution10.objective_value
     product.append(product_v)
 
-result_df = pd.DataFrame({"glucose_uptake":gluc_flux,"acetate_uptake":ac_flux,"product_rate":product})
-result_df["yield(gDW/mmol C)"] = result_df["product_rate"]/18
+result_df = pd.DataFrame({"glucose_uptake(mmol gluc/gDW.h)":gluc_flux,"acetate_uptake(mmol ac/gDW.h)":ac_flux,"product_rate(mmol res/gDW.h)":product})
+result_df["mmol C/mmol C)"] = 14*result_df["product_rate(mmol res/gDW.h)"]/18
 result_df.to_excel("result/product_glucose_acetate_for_yli.xlsx")
 
 
 
 
+# for fatty acid
+# glucose exchange x acetate exchange
+model1.add_boundary(model.metabolites.get_by_id("m1641"), type="sink")
+model1.objective = 'SK_m1641'
+model1.reactions.get_by_id("y002111").bounds = (0.00, 0.00) # fix growth
+model1.reactions.get_by_id("y001714").bounds = (-0.5, 0) # D-glucose exchange
+model1.reactions.get_by_id("y001793").bounds = (0, 0) # formate exchange
+model1.reactions.get_by_id("y001634").bounds = (-1.5, 0) # acetate exchange
+solution10 = model1.optimize()
+# how to combine
+gluc_flux = np.linspace(-3, 0, 30)
+ac_flux = [(-3-x)*6/2 for x in gluc_flux]
+product = []
+for x, y in zip(gluc_flux, ac_flux):
+    model1.reactions.get_by_id("y001714").bounds = (x, 0)  # D-glucose exchange
+    model1.reactions.get_by_id("y001793").bounds = (0, 0)  # formate exchange
+    model1.reactions.get_by_id("y001634").bounds = (y, 0)  # acetate exchange
+    solution10 = model1.optimize()
+    product_v = solution10.objective_value
+    product.append(product_v)
+
+result_df = pd.DataFrame({"glucose_uptake(mmol gluc/gDW.h)":gluc_flux,"acetate_uptake(mmol ac/gDW.h)":ac_flux,"product_rate(mmol fatty acid/gDW.h)":product})
+result_df["yield(mmol fatty acid/mmol C)"] = result_df["product_rate(mmol fatty acid/gDW.h)"]/18
+result_df.to_excel("result/fatty_acid_glucose_acetate_for_yli.xlsx")
 
 
 
