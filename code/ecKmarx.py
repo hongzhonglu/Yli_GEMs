@@ -84,3 +84,8 @@ ID_mapping = pd.DataFrame({"rxnID":rxnID,"gene":gpr})
 ID_mapping.to_excel("result/ID_mapping_for_Kmarx.xlsx")
 
 
+###
+
+
+
+
