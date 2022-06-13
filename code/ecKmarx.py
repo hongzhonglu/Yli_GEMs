@@ -6,24 +6,18 @@
 from cobra.io import read_sbml_model, load_matlab_model, write_sbml_model, load_json_model
 import cobra
 cobra_config = cobra.Configuration()
-from cobra.manipulation import *
 import pandas as pd
-from cobra import Reaction
 import numpy as np
-
 import os
-import sys
-
-from cobra import Reaction
-from cobra.flux_analysis import pfba
-
-
 from cameo.strain_design.deterministic.flux_variability_based import FSEOF
 
-model0 = load_matlab_model("/Users/xluhon/Documents/GitHub/GECKO2_simulations/ecModels/ecKmarx/ecKmarx_batch.mat") # the reaction id should not contain white space!!
+dir0 = os.getcwd()
+
+
+model0 = load_matlab_model(dir0 + "/model/ecKmarx_batch.mat") # the reaction id should not contain white space!!
 solution1 = model0.optimize()
 
-GEM_model = read_sbml_model("/Users/xluhon/Documents/GitHub/Kluyveromyces_marxianus-GEM/modelFiles/xml/Kluyveromyces_marxianus-GEM.xml") # the reaction id should not contain white space!!
+GEM_model = read_sbml_model(dir0 + "/model/Kluyveromyces_marxianus-GEM.xml") # the reaction id should not contain white space!!
 solution2 = GEM_model.optimize()
 
 
@@ -82,10 +76,3 @@ for rxn in model0.reactions:
 
 ID_mapping = pd.DataFrame({"rxnID":rxnID,"gene":gpr})
 ID_mapping.to_excel("result/ID_mapping_for_Kmarx.xlsx")
-
-
-###
-
-
-
-

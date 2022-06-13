@@ -172,3 +172,6 @@ model.reactions.get_by_id("y001714").bounds = (-0.61, 0)
 #model.reactions.get_by_id("R_EX_o2(e)").bounds = (-2,0) # current no data
 model.reactions.get_by_id("y001663").bounds = (1.5, 1.5)
 solution = model.optimize()
+
+
+
