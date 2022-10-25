@@ -2,6 +2,9 @@
 # -*- python 3 -*-
 # -*- hongzhong Lu -*-
 
+# Evaluate how carbon combinations affect the biomass yield for Guokun Wang
+
+
 # to do
 # update biomass composition for 4 strains       reaction ID: xBIOMASS
 # update GEMs based on metabolic engineering strategy
