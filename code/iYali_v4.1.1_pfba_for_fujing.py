@@ -2,9 +2,6 @@
 # -*- python 3 -*-
 # -*- hongzhong Lu -*-
 
-# Evaluate how carbon combinations affect the biomass yield for Guokun Wang
-
-
 # to do
 # update biomass composition for 4 strains       reaction ID: xBIOMASS
 # update GEMs based on metabolic engineering strategy
@@ -198,7 +195,7 @@ all_data = all_data.iloc[0:15, 0:17]
 all_fluxes = pd.DataFrame({"rxnID": all_rxn})
 
 for i, x in all_data.iterrows():
-    print(i)
+    #print(i)
     #print(i, x)
     qs = x[1]
     qco2 = x[2]
@@ -210,8 +207,8 @@ for i, x in all_data.iterrows():
     qita = x[8]
     model3.objective = 'y002111'  # growth
     model3.reactions.get_by_id("y001714").bounds = (qs*(-1), 0)  # D-glucose exchange
-    model.reactions.get_by_id("y001663").bounds = (qco2, qco2)  # bicarbonate exchange
-    model.reactions.get_by_id("y001992").bounds = (qo2*(-1), qo2*(-1))  # oxygen exchange
+    model3.reactions.get_by_id("y001663").bounds = (qco2, qco2)  # bicarbonate exchange
+    model3.reactions.get_by_id("y001992").bounds = (qo2*(-1), qo2*(-1))  # oxygen exchange
     # by-product
     model3.reactions.get_by_id("y001793").bounds = (0, 0)  # formate exchange
     model3.reactions.get_by_id("y001634").bounds = (0, 0)  # acetate exchange
@@ -221,7 +218,9 @@ for i, x in all_data.iterrows():
     model3.reactions.get_by_id("y002056").bounds = (x[7], x[7])  # Succinate exchange
     model3.reactions.get_by_id("exchange_itaconate").bounds = (x[8],x[8])  # itaconate exchange
     solution1 = model3.optimize()
+    print(x[0])
     print(solution1.objective_value)
+    print(solution1.fluxes["y001663"])
     fluxes = solution1.fluxes.tolist()
     all_fluxes[x[0]] = fluxes
 
@@ -231,4 +230,46 @@ all_fluxes.to_excel("result/fluxes_for_all_condition.xlsx")
 
 
 
+
+all_fluxes = pd.DataFrame({"rxnID": all_rxn})
+
+for i, x in all_data.iterrows():
+    #print(i)
+    #print(i, x)
+    qs = x[1]
+    qco2 = x[2]
+    qo2 = x[3]
+    qcit = x[4]
+    qpyr = x[5]
+    qeth = x[6]
+    qsucc = x[7]
+    qita = x[8]
+    growth = x[16]
+    if x[14] == 'Ammonium Sulphate':
+        model3.reactions.get_by_id("y001654").bounds = (-1000, 0)  # ammonia
+        model3.reactions.get_by_id("y002091").bounds = (0, 0)  # urea
+        model3.objective = {model3.reactions.y001714: 1}
+        model3.reactions.get_by_id("y001714").bounds = (-1000, 0)  # D-glucose exchange
+        model3.reactions.get_by_id("y002111").bounds = (growth, growth)  # growth exchange
+        # model3.reactions.get_by_id("y001714").bounds = (qs*(-1), 0)  # D-glucose exchange
+        model3.reactions.get_by_id("y001663").bounds = (qco2, qco2)  # bicarbonate exchange
+        # model3.reactions.get_by_id("y001992").bounds = (qo2*(-1), qo2*(-1))  # oxygen exchange
+        # by-product
+        model3.reactions.get_by_id("y001793").bounds = (0, 0)  # formate exchange
+        model3.reactions.get_by_id("y001634").bounds = (0, 0)  # acetate exchange
+        model3.reactions.get_by_id("y001687").bounds = (x[4], x[4])  # citrate exchange
+        model3.reactions.get_by_id("y002033").bounds = (x[5], x[5])  # Pyruvate exchange
+        model3.reactions.get_by_id("y001761").bounds = (x[6], x[6])  # Ethanol exchange
+        model3.reactions.get_by_id("y002056").bounds = (x[7], x[7])  # Succinate exchange
+        model3.reactions.get_by_id("exchange_itaconate").bounds = (x[8], x[8])  # itaconate exchange
+        solution1 = model3.optimize()
+    else:
+        model3.reactions.get_by_id("y001654").bounds = (0, 0) # ammonia
+        model3.reactions.get_by_id("y002091").bounds = (-1000, 0) # urea
+        solution1 = model3.optimize()
+
+    fluxes = solution1.fluxes.tolist()
+    all_fluxes[x[0]] = fluxes
+
+all_fluxes.to_excel("result/fluxes_for_all_condition.xlsx")
 
