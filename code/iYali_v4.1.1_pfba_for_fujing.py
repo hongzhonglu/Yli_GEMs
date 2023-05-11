@@ -8,9 +8,6 @@
 # simulate the phenotype and get flux data
 
 
-
-
-
 from cobra.io import read_sbml_model, load_matlab_model, write_sbml_model
 import cobra
 cobra_config = cobra.Configuration()
